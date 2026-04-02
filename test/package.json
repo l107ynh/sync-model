@@ -1,0 +1,19 @@
+{
+  "name": "sync-model-e2e-tests",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sprint 1 E2E + Browser tests for sync-model",
+  "scripts": {
+    "test": "vitest run",
+    "test:e2e": "vitest run --dir e2e",
+    "test:browser": "playwright test --config playwright.config.ts",
+    "test:watch": "vitest watch"
+  },
+  "devDependencies": {
+    "vitest": "^3.1.1",
+    "@playwright/test": "^1.52.0",
+    "node-fetch": "^3.3.2",
+    "typescript": "^5.8.3",
+    "@types/node": "^22.14.0"
+  }
+}

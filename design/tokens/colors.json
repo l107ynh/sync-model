@@ -118,5 +118,35 @@
     "border": { "value": "#E2E8F0", "type": "color", "description": "slate-200" },
     "borderDark": { "value": "#334155", "type": "color", "description": "slate-700" },
     "ring": { "value": "#3B82F6", "type": "color", "description": "blue-500 focus ring" }
+  },
+  "diff": {
+    "added": {
+      "bg": { "value": "#F0FDF4", "type": "color", "description": "green-50 - diff 新增背景" },
+      "bgDark": { "value": "rgba(34, 197, 94, 0.2)", "type": "color", "description": "green-500/20 - diff 新增背景 (dark)" },
+      "text": { "value": "#15803D", "type": "color", "description": "green-700 - diff 新增文字" },
+      "textDark": { "value": "#86EFAC", "type": "color", "description": "green-300 - diff 新增文字 (dark)" },
+      "border": { "value": "#BBF7D0", "type": "color", "description": "green-200 - diff 新增邊框" },
+      "borderDark": { "value": "#166534", "type": "color", "description": "green-800 - diff 新增邊框 (dark)" }
+    },
+    "removed": {
+      "bg": { "value": "#FEF2F2", "type": "color", "description": "red-50 - diff 刪除背景" },
+      "bgDark": { "value": "rgba(239, 68, 68, 0.2)", "type": "color", "description": "red-500/20 - diff 刪除背景 (dark)" },
+      "text": { "value": "#B91C1C", "type": "color", "description": "red-700 - diff 刪除文字" },
+      "textDark": { "value": "#FCA5A5", "type": "color", "description": "red-300 - diff 刪除文字 (dark)" },
+      "border": { "value": "#FECACA", "type": "color", "description": "red-200 - diff 刪除邊框" },
+      "borderDark": { "value": "#991B1B", "type": "color", "description": "red-800 - diff 刪除邊框 (dark)" }
+    },
+    "modified": {
+      "bg": { "value": "#FFFBEB", "type": "color", "description": "amber-50 - diff 修改背景" },
+      "bgDark": { "value": "rgba(245, 158, 11, 0.2)", "type": "color", "description": "amber-500/20 - diff 修改背景 (dark)" },
+      "text": { "value": "#B45309", "type": "color", "description": "amber-700 - diff 修改文字" },
+      "textDark": { "value": "#FCD34D", "type": "color", "description": "amber-300 - diff 修改文字 (dark)" },
+      "border": { "value": "#FDE68A", "type": "color", "description": "amber-200 - diff 修改邊框" },
+      "borderDark": { "value": "#92400E", "type": "color", "description": "amber-800 - diff 修改邊框 (dark)" }
+    },
+    "unchanged": {
+      "bg": { "value": "#F8FAFC", "type": "color", "description": "slate-50 - diff 未變更背景" },
+      "text": { "value": "#64748B", "type": "color", "description": "slate-500 - diff 未變更文字" }
+    }
   }
 }

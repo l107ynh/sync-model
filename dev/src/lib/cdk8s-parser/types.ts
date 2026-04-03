@@ -81,6 +81,7 @@ export interface ImportSummary {
   editionsCount: number;
   modelComponentsCount: number;
   modelSettingsCount: number;
+  environments: string[];
   editions: string[];
   modelTypes: Record<string, number>;
 }

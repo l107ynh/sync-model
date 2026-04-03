@@ -10,7 +10,7 @@
  *   { status, version?, summary, warnings }
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
@@ -27,7 +27,10 @@ import type {
   ImportSummary,
   ParsedEditionGpuSettings,
   ParsedModelComponent,
+  ParsedEnvironment,
 } from "@/lib/cdk8s-parser/types";
+import { successResponse, errorResponse } from "@/lib/api";
+import { ApiError, ErrorCodes } from "@/lib/api-error";
 
 const requestSchema = z.object({
   repoPath: z.string().min(1, "repoPath 不可為空"),
@@ -39,70 +42,64 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  // 1. 驗證輸入
-  let body: z.infer<typeof requestSchema>;
   try {
-    const raw = await request.json();
-    body = requestSchema.parse(raw);
-  } catch (err) {
-    if (err instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: "INVALID_INPUT", details: err.errors },
-        { status: 400 }
+    // 1. 驗證輸入
+    let body: z.infer<typeof requestSchema>;
+    try {
+      const raw = await request.json();
+      body = requestSchema.parse(raw);
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        throw new ApiError("INVALID_INPUT", "輸入驗證失敗", err.errors);
+      }
+      throw new ApiError("INVALID_INPUT", "無效的 JSON");
+    }
+
+    const { repoPath, versionName, dryRun } = body;
+
+    // 2. 檢查 version 是否已存在
+    if (!dryRun) {
+      const existing = await db
+        .select()
+        .from(versions)
+        .where(eq(versions.name, versionName))
+        .limit(1);
+      if (existing.length > 0) {
+        throw new ApiError(
+          "DUPLICATE",
+          `版本 "${versionName}" 已存在`
+        );
+      }
+    }
+
+    // 3. 解析 cdk8s repo
+    let parseResult;
+    try {
+      parseResult = await parseCdk8sRepo(repoPath);
+    } catch (err) {
+      throw new ApiError(
+        "PARSE_ERROR",
+        err instanceof Error ? err.message : "設定檔解析失敗"
       );
     }
-    return NextResponse.json(
-      { error: "INVALID_INPUT", message: "無效的 JSON" },
-      { status: 400 }
+
+    // 4. 計算 summary
+    const summary = buildSummary(
+      parseResult.editions,
+      parseResult.modelComponents,
+      parseResult.environments
     );
-  }
 
-  const { repoPath, versionName, dryRun } = body;
-
-  // 2. 檢查 version 是否已存在
-  if (!dryRun) {
-    const existing = await db
-      .select()
-      .from(versions)
-      .where(eq(versions.name, versionName))
-      .limit(1);
-    if (existing.length > 0) {
-      return NextResponse.json(
-        { error: "DUPLICATE", message: `版本 "${versionName}" 已存在` },
-        { status: 409 }
-      );
+    // 5. Dry run — 只回傳解析結果
+    if (dryRun) {
+      return successResponse({
+        status: "dry_run",
+        summary,
+        warnings: parseResult.warnings,
+      } satisfies ImportResponse);
     }
-  }
 
-  // 3. 解析 cdk8s repo
-  let parseResult;
-  try {
-    parseResult = await parseCdk8sRepo(repoPath);
-  } catch (err) {
-    return NextResponse.json(
-      {
-        error: "PARSE_ERROR",
-        message:
-          err instanceof Error ? err.message : "設定檔解析失敗",
-      },
-      { status: 422 }
-    );
-  }
-
-  // 4. 計算 summary
-  const summary = buildSummary(parseResult.editions, parseResult.modelComponents);
-
-  // 5. Dry run — 只回傳解析結果
-  if (dryRun) {
-    return NextResponse.json({
-      status: "dry_run",
-      summary,
-      warnings: parseResult.warnings,
-    } satisfies ImportResponse);
-  }
-
-  // 6. 寫入資料庫
-  try {
+    // 6. 寫入資料庫
     const versionRecord = await writeToDatabase(
       versionName,
       parseResult.editions,
@@ -110,7 +107,7 @@ export async function POST(request: NextRequest) {
       summary
     );
 
-    return NextResponse.json({
+    return successResponse({
       status: "success",
       version: {
         id: versionRecord.id,
@@ -120,13 +117,14 @@ export async function POST(request: NextRequest) {
       warnings: parseResult.warnings,
     } satisfies ImportResponse);
   } catch (err) {
-    return NextResponse.json(
-      {
-        error: "DB_ERROR",
-        message:
-          err instanceof Error ? err.message : "資料庫寫入失敗",
-      },
-      { status: 500 }
+    if (err instanceof ApiError) {
+      return errorResponse(err.code, err.message, err.status, err.details);
+    }
+    console.error("Import failed:", err);
+    return errorResponse(
+      ErrorCodes.INTERNAL_ERROR.code,
+      err instanceof Error ? err.message : "資料庫寫入失敗",
+      ErrorCodes.INTERNAL_ERROR.status
     );
   }
 }
@@ -136,9 +134,11 @@ export async function POST(request: NextRequest) {
  */
 function buildSummary(
   editionsList: ParsedEditionGpuSettings[],
-  componentsList: ParsedModelComponent[]
+  componentsList: ParsedModelComponent[],
+  environmentsList: ParsedEnvironment[]
 ): ImportSummary {
   const editionNames = editionsList.map((e) => e.editionName);
+  const environmentNames = environmentsList.map((e) => e.name);
 
   // 計算 model types 分佈
   const modelTypes: Record<string, number> = {};
@@ -150,10 +150,11 @@ function buildSummary(
   const modelSettingsCount = componentsList.length * editionsList.length;
 
   return {
-    environmentsCount: 0, // 環境數（本版不從 cfg 寫入，設為 0）
+    environmentsCount: environmentNames.length,
     editionsCount: editionNames.length,
     modelComponentsCount: componentsList.length,
     modelSettingsCount,
+    environments: environmentNames,
     editions: editionNames,
     modelTypes,
   };

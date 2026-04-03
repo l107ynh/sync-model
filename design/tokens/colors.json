@@ -1,0 +1,122 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "description": "Sync Model - Design Tokens: Colors",
+  "brand": {
+    "primary": {
+      "value": "#0F172A",
+      "type": "color",
+      "description": "Slate 900 - 主品牌色，用於標題、重要文字"
+    },
+    "primaryForeground": {
+      "value": "#F8FAFC",
+      "type": "color",
+      "description": "Slate 50 - 主品牌色上的前景文字"
+    }
+  },
+  "modelType": {
+    "LLM": {
+      "bg": { "value": "#DBEAFE", "type": "color", "description": "blue-100" },
+      "text": { "value": "#1D4ED8", "type": "color", "description": "blue-700" },
+      "accent": { "value": "#3B82F6", "type": "color", "description": "blue-500" },
+      "darkBg": { "value": "#1E3A5F", "type": "color", "description": "blue-900" },
+      "darkText": { "value": "#93C5FD", "type": "color", "description": "blue-300" }
+    },
+    "ASR": {
+      "bg": { "value": "#DCFCE7", "type": "color", "description": "green-100" },
+      "text": { "value": "#15803D", "type": "color", "description": "green-700" },
+      "accent": { "value": "#22C55E", "type": "color", "description": "green-500" },
+      "darkBg": { "value": "#14532D", "type": "color", "description": "green-900" },
+      "darkText": { "value": "#86EFAC", "type": "color", "description": "green-300" }
+    },
+    "TTS": {
+      "bg": { "value": "#F3E8FF", "type": "color", "description": "purple-100" },
+      "text": { "value": "#7E22CE", "type": "color", "description": "purple-700" },
+      "accent": { "value": "#A855F7", "type": "color", "description": "purple-500" },
+      "darkBg": { "value": "#3B0764", "type": "color", "description": "purple-900" },
+      "darkText": { "value": "#D8B4FE", "type": "color", "description": "purple-300" }
+    },
+    "VLM": {
+      "bg": { "value": "#FFF7ED", "type": "color", "description": "orange-100" },
+      "text": { "value": "#C2410C", "type": "color", "description": "orange-700" },
+      "accent": { "value": "#F97316", "type": "color", "description": "orange-500" },
+      "darkBg": { "value": "#431407", "type": "color", "description": "orange-950" },
+      "darkText": { "value": "#FDBA74", "type": "color", "description": "orange-300" }
+    },
+    "Retriever": {
+      "bg": { "value": "#CFFAFE", "type": "color", "description": "cyan-100" },
+      "text": { "value": "#0E7490", "type": "color", "description": "cyan-700" },
+      "accent": { "value": "#06B6D4", "type": "color", "description": "cyan-500" },
+      "darkBg": { "value": "#164E63", "type": "color", "description": "cyan-900" },
+      "darkText": { "value": "#67E8F9", "type": "color", "description": "cyan-300" }
+    },
+    "Reranker": {
+      "bg": { "value": "#FCE7F3", "type": "color", "description": "pink-100" },
+      "text": { "value": "#BE185D", "type": "color", "description": "pink-700" },
+      "accent": { "value": "#EC4899", "type": "color", "description": "pink-500" },
+      "darkBg": { "value": "#500724", "type": "color", "description": "pink-950" },
+      "darkText": { "value": "#F9A8D4", "type": "color", "description": "pink-300" }
+    },
+    "ObjectDetection": {
+      "bg": { "value": "#FEF9C3", "type": "color", "description": "yellow-100" },
+      "text": { "value": "#A16207", "type": "color", "description": "yellow-700" },
+      "accent": { "value": "#EAB308", "type": "color", "description": "yellow-500" },
+      "darkBg": { "value": "#422006", "type": "color", "description": "yellow-950" },
+      "darkText": { "value": "#FDE047", "type": "color", "description": "yellow-300" }
+    },
+    "ObjectRecognition": {
+      "bg": { "value": "#CCFBF1", "type": "color", "description": "teal-100" },
+      "text": { "value": "#0F766E", "type": "color", "description": "teal-700" },
+      "accent": { "value": "#14B8A6", "type": "color", "description": "teal-500" },
+      "darkBg": { "value": "#134E4A", "type": "color", "description": "teal-900" },
+      "darkText": { "value": "#5EEAD4", "type": "color", "description": "teal-300" }
+    },
+    "Face": {
+      "bg": { "value": "#FFE4E6", "type": "color", "description": "rose-100" },
+      "text": { "value": "#BE123C", "type": "color", "description": "rose-700" },
+      "accent": { "value": "#F43F5E", "type": "color", "description": "rose-500" },
+      "darkBg": { "value": "#4C0519", "type": "color", "description": "rose-950" },
+      "darkText": { "value": "#FDA4AF", "type": "color", "description": "rose-300" }
+    },
+    "Guardian": {
+      "bg": { "value": "#E0E7FF", "type": "color", "description": "indigo-100" },
+      "text": { "value": "#4338CA", "type": "color", "description": "indigo-700" },
+      "accent": { "value": "#6366F1", "type": "color", "description": "indigo-500" },
+      "darkBg": { "value": "#1E1B4B", "type": "color", "description": "indigo-950" },
+      "darkText": { "value": "#A5B4FC", "type": "color", "description": "indigo-300" }
+    }
+  },
+  "status": {
+    "deployed": {
+      "value": "#22C55E",
+      "type": "color",
+      "description": "green-500 - 已部署狀態"
+    },
+    "deployedDark": {
+      "value": "#4ADE80",
+      "type": "color",
+      "description": "green-400 - 已部署狀態 (dark mode)"
+    },
+    "disabled": {
+      "value": "#94A3B8",
+      "type": "color",
+      "description": "slate-400 - 未部署 / 停用狀態"
+    },
+    "disabledDark": {
+      "value": "#475569",
+      "type": "color",
+      "description": "slate-600 - 未部署 / 停用狀態 (dark mode)"
+    }
+  },
+  "semantic": {
+    "background": { "value": "#FFFFFF", "type": "color" },
+    "backgroundDark": { "value": "#0F172A", "type": "color" },
+    "foreground": { "value": "#0F172A", "type": "color" },
+    "foregroundDark": { "value": "#F8FAFC", "type": "color" },
+    "muted": { "value": "#F1F5F9", "type": "color", "description": "slate-100" },
+    "mutedDark": { "value": "#1E293B", "type": "color", "description": "slate-800" },
+    "mutedForeground": { "value": "#64748B", "type": "color", "description": "slate-500" },
+    "border": { "value": "#E2E8F0", "type": "color", "description": "slate-200" },
+    "borderDark": { "value": "#334155", "type": "color", "description": "slate-700" },
+    "ring": { "value": "#3B82F6", "type": "color", "description": "blue-500 focus ring" }
+  }
+}

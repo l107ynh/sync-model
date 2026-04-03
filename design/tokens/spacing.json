@@ -1,0 +1,54 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "description": "Sync Model - Design Tokens: Spacing",
+  "space": {
+    "0": { "value": "0px" },
+    "0.5": { "value": "2px" },
+    "1": { "value": "4px", "description": "badge 內間距" },
+    "1.5": { "value": "6px" },
+    "2": { "value": "8px", "description": "表格 cell 內間距、icon 與文字間距" },
+    "3": { "value": "12px", "description": "篩選元件內間距" },
+    "4": { "value": "16px", "description": "卡片內間距、區塊間距" },
+    "5": { "value": "20px" },
+    "6": { "value": "24px", "description": "頁面區塊間距" },
+    "8": { "value": "32px", "description": "頁面邊距" },
+    "10": { "value": "40px" },
+    "12": { "value": "48px", "description": "主要區塊間距" },
+    "16": { "value": "64px" }
+  },
+  "borderRadius": {
+    "none": { "value": "0px" },
+    "sm": { "value": "4px", "description": "badge, small tag" },
+    "md": { "value": "6px", "description": "button, input, select" },
+    "lg": { "value": "8px", "description": "card, dropdown menu" },
+    "xl": { "value": "12px", "description": "dialog, modal" },
+    "full": { "value": "9999px", "description": "deploy status indicator (圓形)" }
+  },
+  "layout": {
+    "pageMaxWidth": { "value": "1400px", "description": "頁面最大寬度" },
+    "pagePadding": {
+      "mobile": { "value": "16px" },
+      "tablet": { "value": "24px" },
+      "desktop": { "value": "32px" }
+    },
+    "sidebarWidth": { "value": "240px", "description": "側邊導覽列寬度" },
+    "filterBarGap": { "value": "12px", "description": "篩選列元素間距" },
+    "tableRowHeight": { "value": "48px", "description": "表格行高" },
+    "cardGrid": {
+      "gap": { "value": "16px" },
+      "columns": {
+        "mobile": 1,
+        "tablet": 2,
+        "desktop": 3,
+        "wide": 4
+      }
+    }
+  },
+  "breakpoints": {
+    "sm": { "value": "640px" },
+    "md": { "value": "768px" },
+    "lg": { "value": "1024px" },
+    "xl": { "value": "1280px" },
+    "2xl": { "value": "1536px" }
+  }
+}

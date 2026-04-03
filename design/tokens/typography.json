@@ -1,0 +1,84 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "description": "Sync Model - Design Tokens: Typography",
+  "fontFamily": {
+    "sans": {
+      "value": "Inter, ui-sans-serif, system-ui, -apple-system, sans-serif",
+      "type": "fontFamily",
+      "description": "主要字體，用於 UI 文字"
+    },
+    "mono": {
+      "value": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace",
+      "type": "fontFamily",
+      "description": "等寬字體，用於 model name、版本號、GPU 設定等技術資訊"
+    }
+  },
+  "fontSize": {
+    "xs": { "value": "0.75rem", "lineHeight": "1rem", "description": "12px - 輔助資訊、badge 文字" },
+    "sm": { "value": "0.875rem", "lineHeight": "1.25rem", "description": "14px - 表格內容、篩選標籤" },
+    "base": { "value": "1rem", "lineHeight": "1.5rem", "description": "16px - 主體文字" },
+    "lg": { "value": "1.125rem", "lineHeight": "1.75rem", "description": "18px - 區塊標題" },
+    "xl": { "value": "1.25rem", "lineHeight": "1.75rem", "description": "20px - 頁面副標題" },
+    "2xl": { "value": "1.5rem", "lineHeight": "2rem", "description": "24px - 頁面標題" },
+    "3xl": { "value": "1.875rem", "lineHeight": "2.25rem", "description": "30px - 大標題" }
+  },
+  "fontWeight": {
+    "normal": { "value": "400", "description": "一般文字" },
+    "medium": { "value": "500", "description": "強調文字、表頭" },
+    "semibold": { "value": "600", "description": "標題、按鈕" },
+    "bold": { "value": "700", "description": "頁面標題" }
+  },
+  "letterSpacing": {
+    "tight": { "value": "-0.025em", "description": "標題用" },
+    "normal": { "value": "0em", "description": "一般文字" },
+    "wide": { "value": "0.025em", "description": "大寫標籤（如 Model Type badge）" }
+  },
+  "presets": {
+    "pageTitle": {
+      "fontSize": "2xl",
+      "fontWeight": "bold",
+      "letterSpacing": "tight",
+      "fontFamily": "sans",
+      "description": "頁面標題，如「版本清單」、「v3.2 設定表格」"
+    },
+    "sectionTitle": {
+      "fontSize": "lg",
+      "fontWeight": "semibold",
+      "letterSpacing": "normal",
+      "fontFamily": "sans",
+      "description": "區塊標題，如「篩選」"
+    },
+    "tableHeader": {
+      "fontSize": "xs",
+      "fontWeight": "medium",
+      "letterSpacing": "wide",
+      "fontFamily": "sans",
+      "description": "表格欄位標題，大寫顯示"
+    },
+    "tableCell": {
+      "fontSize": "sm",
+      "fontWeight": "normal",
+      "fontFamily": "sans",
+      "description": "表格內容"
+    },
+    "tableCellMono": {
+      "fontSize": "sm",
+      "fontWeight": "normal",
+      "fontFamily": "mono",
+      "description": "表格中的技術資訊（model name, version, GPU）"
+    },
+    "badge": {
+      "fontSize": "xs",
+      "fontWeight": "medium",
+      "letterSpacing": "wide",
+      "fontFamily": "sans",
+      "description": "Badge / Tag 文字"
+    },
+    "caption": {
+      "fontSize": "xs",
+      "fontWeight": "normal",
+      "fontFamily": "sans",
+      "description": "輔助說明文字，如分頁資訊「第 1-50 筆，共 324 筆」"
+    }
+  }
+}

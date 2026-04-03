@@ -34,6 +34,7 @@ import {
   ChevronRight,
   ChevronDown,
   ChevronRight as ChevronRightIcon,
+  Pencil,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -73,6 +74,7 @@ interface SettingsTableProps {
   onSortingChange: (sortBy: string, sortOrder: "asc" | "desc") => void;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
+  onEditSetting?: (setting: SettingRow) => void;
 }
 
 // Sub-components
@@ -169,7 +171,7 @@ function SettingsDetail({ setting }: { setting: SettingRow }) {
 }
 
 // Column definitions
-function createColumns(): ColumnDef<SettingRow>[] {
+function createColumns(onEdit?: (setting: SettingRow) => void): ColumnDef<SettingRow>[] {
   return [
     {
       id: "expander",
@@ -250,6 +252,30 @@ function createColumns(): ColumnDef<SettingRow>[] {
         <GpuMemBar value={row.original.gpu_memory_utilization} />
       ),
     },
+    ...(onEdit
+      ? [
+          {
+            id: "actions",
+            header: () => null,
+            cell: ({ row }: { row: { original: SettingRow } }) => (
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={(e: React.MouseEvent) => {
+                  e.stopPropagation();
+                  onEdit(row.original);
+                }}
+                aria-label="編輯設定"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+              </Button>
+            ),
+            enableSorting: false,
+            size: 48,
+          } as ColumnDef<SettingRow>,
+        ]
+      : []),
   ];
 }
 
@@ -262,8 +288,9 @@ export function SettingsTable({
   onSortingChange,
   sortBy = "name",
   sortOrder = "asc",
+  onEditSetting,
 }: SettingsTableProps) {
-  const columns = React.useMemo(() => createColumns(), []);
+  const columns = React.useMemo(() => createColumns(onEditSetting), [onEditSetting]);
   const [expanded, setExpanded] = React.useState<ExpandedState>({});
 
   // Convert external sort state to TanStack sorting state

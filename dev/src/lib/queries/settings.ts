@@ -4,8 +4,10 @@ import {
   modelComponents,
   environments,
   editions,
+  changeHistories,
 } from "@/db/schema";
 import { eq, and, ilike, sql, asc, desc } from "drizzle-orm";
+import { computeDiff } from "@/lib/diff";
 
 export interface SettingsQueryParams {
   versionId: string;
@@ -270,4 +272,126 @@ export async function getSettingById(settingId: string) {
     created_at: row.createdAt.toISOString(),
     updated_at: row.updatedAt.toISOString(),
   };
+}
+
+export interface SettingChanges {
+  deploy?: boolean;
+  gpu_list?: string[];
+  replica?: number;
+  gpu_memory_utilization?: number;
+  extra_settings?: Record<string, unknown>;
+}
+
+export async function updateSetting(
+  settingId: string,
+  changes: SettingChanges,
+  changedBy: string,
+  reason?: string,
+  expectedUpdatedAt?: string
+): Promise<{ setting: ReturnType<typeof getSettingById> extends Promise<infer T> ? T : never; changeHistoryId: string }> {
+  // 1. Get current setting (raw DB row)
+  const currentRows = await db
+    .select()
+    .from(modelSettings)
+    .where(eq(modelSettings.id, settingId))
+    .limit(1);
+
+  if (currentRows.length === 0) {
+    throw new UpdateSettingError("NOT_FOUND", "Setting not found", 404);
+  }
+
+  const current = currentRows[0];
+
+  // 2. Optimistic lock check
+  if (expectedUpdatedAt) {
+    const expected = new Date(expectedUpdatedAt).getTime();
+    const actual = current.updatedAt.getTime();
+    if (expected !== actual) {
+      throw new UpdateSettingError(
+        "CONFLICT",
+        "Setting has been modified by another user. Please refresh and try again.",
+        409
+      );
+    }
+  }
+
+  // 3. Compute diff
+  const oldValues: Record<string, unknown> = {};
+  const newValues: Record<string, unknown> = {};
+
+  if (changes.deploy !== undefined) {
+    oldValues.deploy = current.deploy;
+    newValues.deploy = changes.deploy;
+  }
+  if (changes.gpu_list !== undefined) {
+    oldValues.gpu_list = current.gpuList ?? [];
+    newValues.gpu_list = changes.gpu_list;
+  }
+  if (changes.replica !== undefined) {
+    oldValues.replica = current.replica;
+    newValues.replica = changes.replica;
+  }
+  if (changes.gpu_memory_utilization !== undefined) {
+    oldValues.gpu_memory_utilization = current.gpuMemoryUtilization
+      ? parseFloat(current.gpuMemoryUtilization)
+      : null;
+    newValues.gpu_memory_utilization = changes.gpu_memory_utilization;
+  }
+  if (changes.extra_settings !== undefined) {
+    oldValues.extra_settings = current.extraSettings ?? {};
+    newValues.extra_settings = changes.extra_settings;
+  }
+
+  const diff = computeDiff(oldValues, newValues);
+
+  if (Object.keys(diff).length === 0) {
+    throw new UpdateSettingError(
+      "INVALID_INPUT",
+      "No changes detected - submitted values are identical to current values",
+      400
+    );
+  }
+
+  // 4. Transaction: update setting + insert change history
+  const now = new Date();
+  const changeHistoryId = crypto.randomUUID();
+
+  await db.transaction(async (tx) => {
+    const updateData: Record<string, unknown> = { updatedAt: now };
+    if (changes.deploy !== undefined) updateData.deploy = changes.deploy;
+    if (changes.gpu_list !== undefined) updateData.gpuList = changes.gpu_list;
+    if (changes.replica !== undefined) updateData.replica = changes.replica;
+    if (changes.gpu_memory_utilization !== undefined) {
+      updateData.gpuMemoryUtilization = String(changes.gpu_memory_utilization);
+    }
+    if (changes.extra_settings !== undefined) updateData.extraSettings = changes.extra_settings;
+
+    await tx
+      .update(modelSettings)
+      .set(updateData)
+      .where(eq(modelSettings.id, settingId));
+
+    await tx.insert(changeHistories).values({
+      id: changeHistoryId,
+      modelSettingId: settingId,
+      changedBy,
+      changeType: "UPDATE",
+      diff,
+      reason: reason || null,
+    });
+  });
+
+  // 5. Return updated setting
+  const setting = await getSettingById(settingId);
+  return { setting: setting!, changeHistoryId };
+}
+
+export class UpdateSettingError extends Error {
+  code: string;
+  status: number;
+  constructor(code: string, message: string, status: number) {
+    super(message);
+    this.code = code;
+    this.status = status;
+  }
 }

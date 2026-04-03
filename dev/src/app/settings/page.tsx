@@ -19,6 +19,15 @@ import {
 } from "@/components/ui/select";
 import { Search, X, ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { EditSettingsForm, type EditChanges } from "@/components/edit-settings-form";
+import { ConfirmDialog } from "@/components/confirm-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import type { SettingRow } from "@/components/settings-table";
 
 const ALL_MODEL_TYPES = [
   "LLM",
@@ -48,6 +57,12 @@ export default function SettingsPage() {
   const sortOrder = (searchParams.get("sort_order") ?? "asc") as "asc" | "desc";
   const page = parseInt(searchParams.get("page") ?? "1", 10);
   const perPage = parseInt(searchParams.get("per_page") ?? "50", 10);
+
+  // Edit state
+  const [editingSetting, setEditingSetting] = useState<SettingRow | null>(null);
+  const [pendingChanges, setPendingChanges] = useState<EditChanges | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   // Local search input state (for debounce)
   const [searchInput, setSearchInput] = useState(search);
@@ -120,6 +135,56 @@ export default function SettingsPage() {
     !!modelType ||
     deployOnly ||
     !!search;
+
+  // Edit handlers
+  const handleEditSetting = useCallback((setting: SettingRow) => {
+    setEditingSetting(setting);
+    setPendingChanges(null);
+    setShowConfirm(false);
+  }, []);
+
+  const handleEditSave = useCallback((changes: EditChanges) => {
+    setPendingChanges(changes);
+    setShowConfirm(true);
+  }, []);
+
+  const handleConfirmSave = useCallback(async () => {
+    if (!editingSetting || !pendingChanges) return;
+    setIsSaving(true);
+
+    try {
+      const { changed_by, reason, expected_updated_at, ...settingChanges } = pendingChanges;
+      const res = await fetch(`/api/v1/settings/${editingSetting.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...settingChanges,
+          changed_by,
+          reason,
+          expected_updated_at,
+        }),
+      });
+
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.message || `HTTP ${res.status}`);
+      }
+
+      // Success - close dialogs and refresh
+      setShowConfirm(false);
+      setEditingSetting(null);
+      setPendingChanges(null);
+      // Trigger refetch
+      if (data) {
+        // Refresh by re-navigating to current URL
+        router.push(`/settings?${searchParams.toString()}`, { scroll: false });
+      }
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "儲存失敗");
+    } finally {
+      setIsSaving(false);
+    }
+  }, [editingSetting, pendingChanges, data, router, searchParams]);
 
   // No version selected state
   if (!versionId) {
@@ -287,7 +352,44 @@ export default function SettingsPage() {
         }
         sortBy={sortBy}
         sortOrder={sortOrder}
+        onEditSetting={handleEditSetting}
       />
+
+      {/* Edit Setting Dialog */}
+      <Dialog
+        open={!!editingSetting && !showConfirm}
+        onOpenChange={(open) => {
+          if (!open) setEditingSetting(null);
+        }}
+      >
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>編輯設定</DialogTitle>
+          </DialogHeader>
+          {editingSetting && (
+            <EditSettingsForm
+              setting={editingSetting}
+              onSave={handleEditSave}
+              onCancel={() => setEditingSetting(null)}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Confirm Dialog */}
+      {editingSetting && (
+        <ConfirmDialog
+          open={showConfirm}
+          onOpenChange={(open) => {
+            setShowConfirm(open);
+            if (!open) setPendingChanges(null);
+          }}
+          setting={editingSetting}
+          changes={pendingChanges}
+          onConfirm={handleConfirmSave}
+          isSubmitting={isSaving}
+        />
+      )}
     </div>
   );
 }

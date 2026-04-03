@@ -1,14 +1,17 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { ModelTypeBadge } from "@/components/model-type-badge";
+import { Pencil } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { SettingRow } from "@/components/settings-table";
 
 interface SettingsDetailProps {
   setting: SettingRow;
   className?: string;
+  onEdit?: (setting: SettingRow) => void;
 }
 
-export function SettingsDetail({ setting, className }: SettingsDetailProps) {
+export function SettingsDetail({ setting, className, onEdit }: SettingsDetailProps) {
   const { model_component, environment, edition, deploy, gpu_list, replica, gpu_memory_utilization, extra_settings, updated_at } = setting;
 
   return (
@@ -25,7 +28,20 @@ export function SettingsDetail({ setting, className }: SettingsDetailProps) {
             </p>
           )}
         </div>
-        <ModelTypeBadge type={model_component.type} size="md" />
+        <div className="flex items-center gap-2">
+          <ModelTypeBadge type={model_component.type} size="md" />
+          {onEdit && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onEdit(setting)}
+              className="gap-1"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              編輯
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Deploy status */}

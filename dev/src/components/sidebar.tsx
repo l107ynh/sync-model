@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Settings2, Table2 } from "lucide-react";
+import { LayoutDashboard, Settings2, Table2, GitCompareArrows } from "lucide-react";
 
 const navItems = [
   {
@@ -16,6 +16,12 @@ const navItems = [
     name: "Settings",
     href: "/settings",
     icon: Table2,
+    exact: false,
+  },
+  {
+    name: "版本比較",
+    href: "/compare",
+    icon: GitCompareArrows,
     exact: false,
   },
 ];

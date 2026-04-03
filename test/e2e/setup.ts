@@ -53,6 +53,13 @@ export function post<T = unknown>(path: string, data?: unknown) {
   });
 }
 
+export function patch<T = unknown>(path: string, data?: unknown) {
+  return apiClient<T>(path, {
+    method: 'PATCH',
+    body: data ? JSON.stringify(data) : undefined,
+  });
+}
+
 export function del<T = unknown>(path: string) {
   return apiClient<T>(path, { method: 'DELETE' });
 }

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "description": "Sync Model — Design Token: Typography",
+
+  "fontFamily": {
+    "sans": "Inter, ui-sans-serif, system-ui, -apple-system, sans-serif",
+    "mono": "JetBrains Mono, ui-monospace, SFMono-Regular, monospace"
+  },
+
+  "fontSize": {
+    "xs":   { "value": "0.75rem",  "lineHeight": "1rem"    },
+    "sm":   { "value": "0.875rem", "lineHeight": "1.25rem" },
+    "base": { "value": "1rem",     "lineHeight": "1.5rem"  },
+    "lg":   { "value": "1.125rem", "lineHeight": "1.75rem" },
+    "xl":   { "value": "1.25rem",  "lineHeight": "1.75rem" },
+    "2xl":  { "value": "1.5rem",   "lineHeight": "2rem"    },
+    "3xl":  { "value": "1.875rem", "lineHeight": "2.25rem" }
+  },
+
+  "fontWeight": {
+    "normal":   400,
+    "medium":   500,
+    "semibold": 600,
+    "bold":     700
+  },
+
+  "letterSpacing": {
+    "tighter": "-0.05em",
+    "tight":   "-0.025em",
+    "normal":  "0em",
+    "wide":    "0.025em"
+  },
+
+  "usage": {
+    "pageTitle":    { "size": "3xl", "weight": "bold",     "tracking": "tight"  },
+    "sectionTitle": { "size": "xl",  "weight": "semibold", "tracking": "tight"  },
+    "cardTitle":    { "size": "lg",  "weight": "semibold", "tracking": "normal" },
+    "body":         { "size": "sm",  "weight": "normal",   "tracking": "normal" },
+    "caption":      { "size": "xs",  "weight": "normal",   "tracking": "normal" },
+    "tableHeader":  { "size": "xs",  "weight": "medium",   "tracking": "wide"   },
+    "tableCell":    { "size": "sm",  "weight": "normal",   "tracking": "normal" },
+    "badge":        { "size": "xs",  "weight": "medium",   "tracking": "normal" },
+    "code":         { "size": "sm",  "weight": "normal",   "tracking": "normal", "family": "mono" }
+  }
+}

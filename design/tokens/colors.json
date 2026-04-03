@@ -1,0 +1,59 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "description": "Sync Model — Design Token: Colors",
+
+  "primary": {
+    "DEFAULT": "#0F172A",
+    "foreground": "#FFFFFF"
+  },
+
+  "background": {
+    "DEFAULT": "#FFFFFF",
+    "muted": "#F8FAFC",
+    "subtle": "#F1F5F9"
+  },
+
+  "foreground": {
+    "DEFAULT": "#0F172A",
+    "muted": "#64748B",
+    "subtle": "#94A3B8"
+  },
+
+  "border": {
+    "DEFAULT": "#E2E8F0",
+    "strong": "#CBD5E1"
+  },
+
+  "modelType": {
+    "LLM":               { "bg": "#DBEAFE", "fg": "#1D4ED8", "solid": "#3B82F6", "label": "藍" },
+    "ASR":               { "bg": "#DCFCE7", "fg": "#15803D", "solid": "#22C55E", "label": "綠" },
+    "TTS":               { "bg": "#F3E8FF", "fg": "#7E22CE", "solid": "#A855F7", "label": "紫" },
+    "VLM":               { "bg": "#FFF7ED", "fg": "#C2410C", "solid": "#F97316", "label": "橘" },
+    "Retriever":         { "bg": "#ECFEFF", "fg": "#0E7490", "solid": "#06B6D4", "label": "青" },
+    "Reranker":          { "bg": "#FDF2F8", "fg": "#BE185D", "solid": "#EC4899", "label": "粉" },
+    "ObjectDetection":   { "bg": "#FEF9C3", "fg": "#A16207", "solid": "#EAB308", "label": "黃" },
+    "ObjectRecognition": { "bg": "#CCFBF1", "fg": "#0F766E", "solid": "#14B8A6", "label": "青綠" },
+    "Face":              { "bg": "#FFE4E6", "fg": "#BE123C", "solid": "#F43F5E", "label": "玫瑰" },
+    "Guardian":          { "bg": "#EEF2FF", "fg": "#4338CA", "solid": "#6366F1", "label": "靛" }
+  },
+
+  "status": {
+    "deployed":  { "solid": "#22C55E", "bg": "#DCFCE7", "fg": "#15803D" },
+    "disabled":  { "solid": "#94A3B8", "bg": "#F1F5F9", "fg": "#64748B" }
+  },
+
+  "environment": {
+    "dev":     "#3B82F6",
+    "stage":   "#F59E0B",
+    "prod":    "#EF4444",
+    "on-prem": "#8B5CF6",
+    "dogfood": "#06B6D4"
+  },
+
+  "semantic": {
+    "success": "#22C55E",
+    "warning": "#F59E0B",
+    "error":   "#EF4444",
+    "info":    "#3B82F6"
+  }
+}

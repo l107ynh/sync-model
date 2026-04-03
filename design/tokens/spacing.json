@@ -1,0 +1,53 @@
+{
+  "$schema": "https://design-tokens.org/schema.json",
+  "description": "Sync Model — Design Token: Spacing (base 4px)",
+
+  "base": "4px",
+
+  "scale": {
+    "0":    "0px",
+    "0.5":  "2px",
+    "1":    "4px",
+    "1.5":  "6px",
+    "2":    "8px",
+    "2.5":  "10px",
+    "3":    "12px",
+    "4":    "16px",
+    "5":    "20px",
+    "6":    "24px",
+    "8":    "32px",
+    "10":   "40px",
+    "12":   "48px",
+    "16":   "64px"
+  },
+
+  "radius": {
+    "none": "0px",
+    "sm":   "2px",
+    "md":   "6px",
+    "lg":   "8px",
+    "xl":   "12px",
+    "full": "9999px"
+  },
+
+  "usage": {
+    "page-padding":     { "x": "6", "y": "6",   "note": "頁面主區域內距 24px" },
+    "section-gap":      { "value": "6",          "note": "區塊間距 24px" },
+    "card-padding":     { "value": "4",          "note": "卡片內距 16px" },
+    "table-cell-x":     { "value": "4",          "note": "表格 cell 水平 16px" },
+    "table-cell-y":     { "value": "3",          "note": "表格 cell 垂直 12px" },
+    "filter-gap":       { "value": "3",          "note": "篩選器間距 12px" },
+    "badge-padding":    { "x": "2.5", "y": "0.5","note": "Badge 內距 10px/2px" },
+    "button-padding":   { "x": "4",   "y": "2",  "note": "按鈕內距 16px/8px" },
+    "sidebar-width":    { "value": "64",          "note": "側邊欄寬度 256px (64*4)" },
+    "sidebar-collapsed":{ "value": "16",          "note": "收合側邊欄 64px" }
+  },
+
+  "breakpoints": {
+    "sm":  "640px",
+    "md":  "768px",
+    "lg":  "1024px",
+    "xl":  "1280px",
+    "2xl": "1536px"
+  }
+}

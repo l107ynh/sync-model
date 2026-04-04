@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Settings2, Table2, GitCompareArrows, History } from "lucide-react";
+import { LayoutDashboard, Settings2, Table2, GitCompareArrows, History, GitPullRequest } from "lucide-react";
 
 const navItems = [
   {
@@ -28,6 +28,12 @@ const navItems = [
     name: "變更歷史",
     href: "/history",
     icon: History,
+    exact: false,
+  },
+  {
+    name: "Merge Requests",
+    href: "/merge-requests",
+    icon: GitPullRequest,
     exact: false,
   },
 ];

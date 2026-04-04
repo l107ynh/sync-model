@@ -6,6 +6,7 @@ const envSchema = z.object({
   GITLAB_TOKEN: z.string().optional(),
   GITLAB_PROJECT_ID: z.string().optional(),
   GOOGLE_CHAT_WEBHOOK_URL: z.string().url().optional(),
+  CDK8S_REPO_PATH: z.string().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;

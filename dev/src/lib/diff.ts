@@ -23,7 +23,7 @@ export function computeDiff(
 /**
  * 深度相等比較（支援 primitive, array, object）
  */
-function isEqual(a: unknown, b: unknown): boolean {
+export function isEqual(a: unknown, b: unknown): boolean {
   if (a === b) return true;
   if (a === null || b === null) return false;
   if (a === undefined || b === undefined) return false;

@@ -8,6 +8,7 @@ import {
 } from "@/db/schema";
 import { eq, and, ilike, sql, asc, desc } from "drizzle-orm";
 import { computeDiff } from "@/lib/diff";
+import { ApiError } from "@/lib/api-error";
 
 export interface SettingsQueryParams {
   versionId: string;
@@ -191,7 +192,7 @@ export async function querySettings(params: SettingsQueryParams) {
       deploy: row.deploy,
       gpu_list: row.gpuList ?? [],
       replica: row.replica,
-      gpu_memory_utilization: row.gpuMemoryUtilization
+      gpu_memory_utilization: row.gpuMemoryUtilization !== null
         ? parseFloat(row.gpuMemoryUtilization)
         : null,
       extra_settings: row.extraSettings ?? {},
@@ -265,7 +266,7 @@ export async function getSettingById(settingId: string) {
     deploy: row.deploy,
     gpu_list: row.gpuList ?? [],
     replica: row.replica,
-    gpu_memory_utilization: row.gpuMemoryUtilization
+    gpu_memory_utilization: row.gpuMemoryUtilization !== null
       ? parseFloat(row.gpuMemoryUtilization)
       : null,
     extra_settings: row.extraSettings ?? {},
@@ -297,7 +298,7 @@ export async function updateSetting(
     .limit(1);
 
   if (currentRows.length === 0) {
-    throw new UpdateSettingError("NOT_FOUND", "Setting not found", 404);
+    throw new ApiError("NOT_FOUND", "Setting not found");
   }
 
   const current = currentRows[0];
@@ -307,10 +308,9 @@ export async function updateSetting(
     const expected = new Date(expectedUpdatedAt).getTime();
     const actual = current.updatedAt.getTime();
     if (expected !== actual) {
-      throw new UpdateSettingError(
+      throw new ApiError(
         "CONFLICT",
-        "Setting has been modified by another user. Please refresh and try again.",
-        409
+        "Setting has been modified by another user. Please refresh and try again."
       );
     }
   }
@@ -332,7 +332,7 @@ export async function updateSetting(
     newValues.replica = changes.replica;
   }
   if (changes.gpu_memory_utilization !== undefined) {
-    oldValues.gpu_memory_utilization = current.gpuMemoryUtilization
+    oldValues.gpu_memory_utilization = current.gpuMemoryUtilization !== null
       ? parseFloat(current.gpuMemoryUtilization)
       : null;
     newValues.gpu_memory_utilization = changes.gpu_memory_utilization;
@@ -345,10 +345,9 @@ export async function updateSetting(
   const diff = computeDiff(oldValues, newValues);
 
   if (Object.keys(diff).length === 0) {
-    throw new UpdateSettingError(
+    throw new ApiError(
       "INVALID_INPUT",
-      "No changes detected - submitted values are identical to current values",
-      400
+      "No changes detected - submitted values are identical to current values"
     );
   }
 
@@ -386,12 +385,3 @@ export async function updateSetting(
   return { setting: setting!, changeHistoryId };
 }
 
-export class UpdateSettingError extends Error {
-  code: string;
-  status: number;
-  constructor(code: string, message: string, status: number) {
-    super(message);
-    this.code = code;
-    this.status = status;
-  }
-}

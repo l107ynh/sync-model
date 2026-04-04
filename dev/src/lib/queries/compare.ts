@@ -7,6 +7,8 @@ import {
   versions,
 } from "@/db/schema";
 import { eq, and, sql } from "drizzle-orm";
+import { isEqual } from "@/lib/diff";
+import { ApiError } from "@/lib/api-error";
 
 export interface CompareParams {
   versionAId: string;
@@ -70,30 +72,6 @@ function getFieldValue(record: SettingRecord, field: string): unknown {
   }
 }
 
-function isEqual(a: unknown, b: unknown): boolean {
-  if (a === b) return true;
-  if (a === null || b === null) return a === b;
-  if (a === undefined || b === undefined) return a === b;
-  if (typeof a !== typeof b) return false;
-
-  if (Array.isArray(a) && Array.isArray(b)) {
-    if (a.length !== b.length) return false;
-    return a.every((val, i) => isEqual(val, b[i]));
-  }
-
-  if (typeof a === "object" && typeof b === "object") {
-    const aObj = a as Record<string, unknown>;
-    const bObj = b as Record<string, unknown>;
-    const keys = new Set([...Object.keys(aObj), ...Object.keys(bObj)]);
-    for (const key of keys) {
-      if (!isEqual(aObj[key], bObj[key])) return false;
-    }
-    return true;
-  }
-
-  return false;
-}
-
 async function getSettingsForVersion(
   versionId: string,
   environmentId?: string,
@@ -138,7 +116,7 @@ async function getSettingsForVersion(
     deploy: r.deploy,
     gpuList: (r.gpuList as string[]) ?? [],
     replica: r.replica,
-    gpuMemoryUtilization: r.gpuMemoryUtilization
+    gpuMemoryUtilization: r.gpuMemoryUtilization !== null
       ? parseFloat(r.gpuMemoryUtilization)
       : null,
     extraSettings: (r.extraSettings as Record<string, unknown>) ?? {},
@@ -155,10 +133,10 @@ export async function compareVersions(params: CompareParams) {
   ]);
 
   if (versionA.length === 0) {
-    throw new CompareError("NOT_FOUND", `Version A not found: ${versionAId}`, 404);
+    throw new ApiError("NOT_FOUND", `Version A not found: ${versionAId}`);
   }
   if (versionB.length === 0) {
-    throw new CompareError("NOT_FOUND", `Version B not found: ${versionBId}`, 404);
+    throw new ApiError("NOT_FOUND", `Version B not found: ${versionBId}`);
   }
 
   // 2. Get settings for both versions
@@ -259,12 +237,3 @@ export async function compareVersions(params: CompareParams) {
   };
 }
 
-export class CompareError extends Error {
-  code: string;
-  status: number;
-  constructor(code: string, message: string, status: number) {
-    super(message);
-    this.code = code;
-    this.status = status;
-  }
-}

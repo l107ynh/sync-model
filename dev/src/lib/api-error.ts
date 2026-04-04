@@ -4,9 +4,12 @@ export const ErrorCodes = {
   CONFLICT: { code: "CONFLICT", status: 409 },
   DUPLICATE: { code: "DUPLICATE", status: 409 },
   PARSE_ERROR: { code: "PARSE_ERROR", status: 422 },
+  CODEGEN_ERROR: { code: "CODEGEN_ERROR", status: 422 },
   INTERNAL_ERROR: { code: "INTERNAL_ERROR", status: 500 },
   GITLAB_ERROR: { code: "GITLAB_ERROR", status: 502 },
+  WEBHOOK_ERROR: { code: "WEBHOOK_ERROR", status: 502 },
   DB_CONNECTION_ERROR: { code: "DB_CONNECTION_ERROR", status: 503 },
+  NOTIFICATION_DISABLED: { code: "NOTIFICATION_DISABLED", status: 503 },
 } as const;
 
 export class ApiError extends Error {

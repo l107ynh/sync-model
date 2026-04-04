@@ -6,3 +6,5 @@ export { modelSettings } from "./model-setting";
 export { changeHistories } from "./change-history";
 export { mergeRequests } from "./merge-request";
 export { imports } from "./import";
+export { codegenResults } from "./codegen-result";
+export { notificationConfig } from "./notification-config";

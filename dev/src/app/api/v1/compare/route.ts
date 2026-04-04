@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { successResponse, errorResponse } from "@/lib/api";
-import { compareVersions, CompareError } from "@/lib/queries/compare";
+import { compareVersions } from "@/lib/queries/compare";
+import { ApiError } from "@/lib/api-error";
 
 const compareQuerySchema = z
   .object({
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
 
     return successResponse(result);
   } catch (error) {
-    if (error instanceof CompareError) {
+    if (error instanceof ApiError) {
       return errorResponse(error.code, error.message, error.status);
     }
     console.error("Failed to compare versions:", error);

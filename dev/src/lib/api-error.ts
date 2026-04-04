@@ -1,6 +1,7 @@
 export const ErrorCodes = {
   INVALID_INPUT: { code: "INVALID_INPUT", status: 400 },
   NOT_FOUND: { code: "NOT_FOUND", status: 404 },
+  CONFLICT: { code: "CONFLICT", status: 409 },
   DUPLICATE: { code: "DUPLICATE", status: 409 },
   PARSE_ERROR: { code: "PARSE_ERROR", status: 422 },
   INTERNAL_ERROR: { code: "INTERNAL_ERROR", status: 500 },

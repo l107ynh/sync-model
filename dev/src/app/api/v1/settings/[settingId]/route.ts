@@ -1,7 +1,8 @@
 import { NextRequest } from "next/server";
 import { z } from "zod";
 import { successResponse, errorResponse } from "@/lib/api";
-import { getSettingById, updateSetting, UpdateSettingError } from "@/lib/queries/settings";
+import { getSettingById, updateSetting } from "@/lib/queries/settings";
+import { ApiError } from "@/lib/api-error";
 
 export async function GET(
   _request: NextRequest,
@@ -89,7 +90,7 @@ export async function PATCH(
       change_history_id: result.changeHistoryId,
     });
   } catch (error) {
-    if (error instanceof UpdateSettingError) {
+    if (error instanceof ApiError) {
       return errorResponse(error.code, error.message, error.status);
     }
     console.error("Failed to update setting:", error);

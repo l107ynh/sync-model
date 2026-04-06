@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Settings2, Table2, GitCompareArrows, History, GitPullRequest } from "lucide-react";
+import { LayoutDashboard, Settings2, Table2, GitCompareArrows, History, GitPullRequest, Upload, Download } from "lucide-react";
 
 const navItems = [
   {
@@ -34,6 +34,18 @@ const navItems = [
     name: "Merge Requests",
     href: "/merge-requests",
     icon: GitPullRequest,
+    exact: false,
+  },
+  {
+    name: "Import",
+    href: "/import",
+    icon: Upload,
+    exact: false,
+  },
+  {
+    name: "Export",
+    href: "/export",
+    icon: Download,
     exact: false,
   },
 ];

@@ -10,6 +10,8 @@ export const ErrorCodes = {
   WEBHOOK_ERROR: { code: "WEBHOOK_ERROR", status: 502 },
   DB_CONNECTION_ERROR: { code: "DB_CONNECTION_ERROR", status: 503 },
   NOTIFICATION_DISABLED: { code: "NOTIFICATION_DISABLED", status: 503 },
+  CONFLUENCE_ERROR: { code: "CONFLUENCE_ERROR", status: 502 },
+  INVALID_FILE: { code: "INVALID_FILE", status: 400 },
 } as const;
 
 export class ApiError extends Error {
